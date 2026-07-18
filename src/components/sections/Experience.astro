@@ -1,0 +1,48 @@
+---
+import SectionHeading from '../ui/SectionHeading.astro';
+import ExperienceCard from '../cards/ExperienceCard.astro';
+import { experiences } from '../../content/experience';
+---
+
+<section id="experience" class="relative py-24 md:py-32 bg-section-alt overflow-hidden">
+  <!-- Background glow -->
+  <div class="bg-glow bg-glow-accent w-[600px] h-[600px] top-0 left-1/2 -translate-x-1/2 opacity-[0.06]"></div>
+
+  <div class="relative z-10 max-w-6xl mx-auto px-6 md:px-12">
+    <SectionHeading
+      label="Professional Experience"
+      eyebrow="Career Journey"
+      description="A story of growth, impact, and continuous learning across data analytics, engineering, and machine learning."
+    />
+
+    <!-- Journey Container -->
+    <div class="relative">
+      <!-- Central Line (desktop only) -->
+      <div class="hidden lg:block absolute left-1/2 top-0 bottom-0 w-px -translate-x-1/2">
+        <div class="experience-line w-full h-full rounded-full"></div>
+      </div>
+
+      <!-- Experience Cards -->
+      <div class="space-y-12 lg:space-y-16">
+        {experiences.map((exp, index) => {
+          const isLeft = index % 2 === 0;
+          return (
+            <div class="relative">
+              {/* Timeline Node */}
+              <div class="hidden lg:flex absolute left-1/2 top-8 -translate-x-1/2 z-20">
+                <div class="w-4 h-4 rounded-full bg-accent-500 border-4 border-dark-950 shadow-lg shadow-accent-500/30">
+                  <div class="w-full h-full rounded-full animate-ping bg-accent-400 opacity-20"></div>
+                </div>
+              </div>
+
+              {/* Connector Line */}
+              <div class={`hidden lg:block absolute top-10 w-8 h-px bg-accent-500/30 ${isLeft ? 'right-1/2 mr-2' : 'left-1/2 ml-2'}`}></div>
+
+              <ExperienceCard experience={exp} index={index} isLeft={isLeft} />
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  </div>
+</section>

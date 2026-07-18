@@ -1,0 +1,28 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Navbar from '../components/layout/Navbar.astro';
+import Hero from '../components/sections/Hero.astro';
+import OrgMarquee from '../components/sections/OrgMarquee.astro';
+import Experience from '../components/sections/Experience.astro';
+import Projects from '../components/sections/Projects.astro';
+import Certifications from '../components/sections/Certifications.astro';
+import Talks from '../components/sections/Talks.astro';
+import Impact from '../components/sections/Impact.astro';
+import Contact from '../components/sections/Contact.astro';
+import Footer from '../components/layout/Footer.astro';
+---
+
+<BaseLayout title="Jen Patrick Nataba">
+  <Navbar />
+  <main>
+    <Hero />
+    <OrgMarquee />
+    <Experience />
+    <Projects />
+    <Certifications />
+    <Talks />
+    <Impact />
+    <Contact />
+  </main>
+  <Footer />
+</BaseLayout>

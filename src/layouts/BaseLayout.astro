@@ -1,0 +1,115 @@
+---
+import '../styles/global.css';
+
+interface Props {
+  title: string;
+  description?: string;
+}
+
+const {
+  title,
+  description = 'Portfolio of Jen Patrick G. Nataba — Data Analyst, Data Scientist, and ML Engineer from Manila, Philippines.',
+} = Astro.props;
+---
+
+<!doctype html>
+<html lang="en" class="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content={description} />
+    <meta name="author" content="Jen Patrick G. Nataba" />
+    <meta name="theme-color" content="#09090b" />
+
+    <!-- Open Graph -->
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+    <meta property="og:image" content="/images/profile/profile.png" />
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+
+    <link rel="icon" type="image/png" href="/images/ui/jen_logo.png" />
+    <title>{title}</title>
+
+    <!-- Theme Script (runs before render to prevent flash) -->
+    <script is:inline>
+      (function () {
+        const stored = localStorage.getItem('theme');
+        if (stored === 'light') {
+          document.documentElement.classList.remove('dark');
+          document.documentElement.classList.add('light');
+        } else {
+          document.documentElement.classList.remove('light');
+          document.documentElement.classList.add('dark');
+        }
+      })();
+    </script>
+  </head>
+  <body id="top" class="min-h-screen">
+    <slot />
+
+    <!-- Lenis Smooth Scroll -->
+    <script>
+      import Lenis from 'lenis';
+
+      const lenis = new Lenis({
+        duration: 1.2,
+        easing: (t: number) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+      });
+
+      // Expose to window for modal scroll locking
+      (window as any).lenis = lenis;
+
+      function raf(time: number) {
+        lenis.raf(time);
+        requestAnimationFrame(raf);
+      }
+      requestAnimationFrame(raf);
+
+      // Support anchor clicks
+      document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
+        anchor.addEventListener('click', (e) => {
+          e.preventDefault();
+          const href = (anchor as HTMLAnchorElement).getAttribute('href');
+          if (!href) return;
+          const target = document.querySelector(href);
+          if (target) {
+            lenis.scrollTo(target as HTMLElement, { offset: -80 });
+          }
+        });
+      });
+    </script>
+
+    <!-- Scroll Reveal Observer -->
+    <script>
+      const revealElements = document.querySelectorAll(
+        '.reveal, .reveal-left, .reveal-right, .reveal-scale'
+      );
+
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              entry.target.classList.add('visible');
+            }
+          });
+        },
+        { threshold: 0.1, rootMargin: '0px 0px -50px 0px' }
+      );
+
+      revealElements.forEach((el) => observer.observe(el));
+    </script>
+  </body>
+</html>

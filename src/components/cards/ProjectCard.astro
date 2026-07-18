@@ -1,0 +1,266 @@
+---
+import type { Project } from '../../content/projects';
+
+interface Props {
+  project: Project;
+  index: number;
+  disableAnimation?: boolean;
+}
+
+const { project, index, disableAnimation = false } = Astro.props;
+const modalId = `project-modal-${project.id}`;
+---
+
+<!-- Card -->
+<div
+  class={`glass-card rounded-2xl overflow-hidden group hover:-translate-y-1 hover:shadow-xl hover:shadow-accent-500/5 transition-all duration-500 ${disableAnimation ? '' : 'reveal'} cursor-pointer flex flex-col h-full`}
+  style={disableAnimation ? '' : `transition-delay: ${index * 150}ms;`}
+  data-open-modal={modalId}
+>
+  <!-- Thumbnail -->
+  <div class="relative h-52 md:h-60 overflow-hidden bg-section-alt shrink-0">
+    <img
+      src={project.thumbnail}
+      alt={project.title}
+      class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+      loading="lazy"
+    />
+    <div class="absolute inset-0 bg-gradient-to-t from-section-alt/90 via-section-alt/20 to-transparent pointer-events-none opacity-80"></div>
+
+    <div class="absolute top-4 right-4 flex gap-2">
+       {project.category && (
+          <span class="badge text-[10px] bg-yellow-400/10 backdrop-blur-sm border-yellow-400/20 uppercase tracking-widest text-yellow-400 font-semibold">{project.category}</span>
+       )}
+    </div>
+
+    <!-- Floating badges on image -->
+    <div class="absolute bottom-4 left-4 right-4 flex flex-wrap gap-1.5 pointer-events-none">
+      {project.technologies.slice(0, 4).map((tech) => (
+        <span class="badge text-[10px] bg-section/80 backdrop-blur-sm border-subtle">{tech}</span>
+      ))}
+      {project.technologies.length > 4 && (
+        <span class="badge text-[10px] bg-section/80 backdrop-blur-sm border-subtle">
+          +{project.technologies.length - 4}
+        </span>
+      )}
+    </div>
+  </div>
+
+  <!-- Content -->
+  <div class="p-6 flex flex-col flex-grow">
+    <h3
+      class="text-lg font-semibold text-primary mb-2 group-hover:text-accent transition-colors duration-300"
+      style="font-family: 'Outfit', sans-serif;"
+    >
+      {project.title}
+    </h3>
+    {project.tagline && (
+      <p class="text-accent-400 text-xs mb-3 font-medium">{project.tagline}</p>
+    )}
+
+    <p class="text-secondary text-sm leading-relaxed line-clamp-3 mb-4">
+      {project.description}
+    </p>
+
+    <!-- Visual cue to click -->
+    <div class="mt-auto pt-4 border-t border-subtle text-xs font-medium text-accent flex items-center gap-2 group-hover:gap-3 transition-all">
+      Read More
+      <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+      </svg>
+    </div>
+  </div>
+</div>
+
+<!-- Modal -->
+<dialog 
+  id={modalId} 
+  class="backdrop:bg-section-alt/80 backdrop:backdrop-blur-sm bg-transparent w-[90vw] max-w-3xl m-auto rounded-3xl p-0 border border-subtle shadow-2xl focus:outline-none"
+>
+  <div class="bg-section overflow-hidden rounded-3xl max-h-[85vh] flex flex-col">
+    <!-- Modal Header/Image -->
+    <div class="relative h-64 sm:h-80 shrink-0 bg-section-alt">
+      <img
+        src={project.thumbnail}
+        alt={project.title}
+        class="w-full h-full object-cover"
+        loading="lazy"
+      />
+      <div class="absolute inset-0 bg-gradient-to-t from-section via-transparent to-section-alt/40"></div>
+      
+      <!-- Close Button -->
+      <button 
+        data-close-modal={modalId}
+        class="absolute top-4 right-4 w-10 h-10 rounded-full bg-section-alt/50 backdrop-blur-md border border-subtle flex items-center justify-center text-primary hover:bg-section-alt transition-colors"
+        aria-label="Close modal"
+      >
+        <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+        </svg>
+      </button>
+
+      <div class="absolute bottom-6 left-6 right-6 z-10">
+        {project.category && (
+           <span class="badge text-xs bg-section-alt/80 backdrop-blur-sm border-subtle uppercase tracking-widest text-accent-300 font-semibold mb-3 inline-block drop-shadow-md">{project.category}</span>
+        )}
+        <h3 class="text-2xl sm:text-3xl font-bold drop-shadow-md" style="font-family: 'Outfit', sans-serif; color: var(--color-accent-400);">
+          {project.title}
+        </h3>
+        {project.tagline && (
+          <p class="text-accent-300 text-sm mt-1 font-medium drop-shadow-md">{project.tagline}</p>
+        )}
+      </div>
+    </div>
+
+    <!-- Modal Content (Scrollable) -->
+    <div class="p-6 sm:p-8 overflow-y-auto custom-scrollbar flex-1 bg-section" data-lenis-prevent>
+      <div class="mb-8">
+        <h4 class="text-sm font-semibold text-primary uppercase tracking-widest mb-3">Overview</h4>
+        <div class="flex justify-between items-start mb-4">
+        </div>
+        <p class="text-secondary leading-relaxed">
+          {project.description}
+        </p>
+      </div>
+
+      {project.highlights && project.highlights.length > 0 && (
+        <div class="mb-8">
+          <h4 class="text-sm font-semibold text-primary uppercase tracking-widest mb-3">Highlights</h4>
+          <ul class="space-y-2">
+            {project.highlights.map(highlight => (
+              <li class="flex items-start gap-2.5 text-secondary text-sm">
+                <svg class="w-4 h-4 text-accent-400 shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4" />
+                </svg>
+                {highlight}
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
+
+      <div class="mb-8">
+        <h4 class="text-sm font-semibold text-primary uppercase tracking-widest mb-3">Tools & Technologies</h4>
+        <div class="flex flex-wrap gap-2">
+          {project.technologies.map((tech) => (
+            <span class="badge py-1 px-3 border border-subtle text-secondary bg-transparent">{tech}</span>
+          ))}
+        </div>
+      </div>
+
+      <!-- Links -->
+      <div class="flex flex-wrap gap-4 pt-4 border-t border-subtle">
+        {project.github && (
+          <a href={project.github} target="_blank" rel="noopener noreferrer" class="btn-primary flex-1 sm:flex-none justify-center">
+            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+            </svg>
+            View Repository
+          </a>
+        )}
+        {project.live && (
+          <a href={project.live} target="_blank" rel="noopener noreferrer" class="btn-secondary flex-1 sm:flex-none justify-center">
+            <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+            </svg>
+            Live Demo
+          </a>
+        )}
+        {project.notebook && (
+          <a href={project.notebook} target="_blank" rel="noopener noreferrer" class="btn-secondary flex-1 sm:flex-none justify-center">
+            <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+            </svg>
+            View Notebook
+          </a>
+        )}
+      </div>
+    </div>
+  </div>
+</dialog>
+
+<script>
+  // Setup modal logic using event delegation
+  function setupModals() {
+    if ((window as any).modalsInitialized) return;
+    (window as any).modalsInitialized = true;
+
+    document.addEventListener('click', (e) => {
+      const target = e.target as HTMLElement;
+      
+      const openBtn = target.closest('[data-open-modal]') as HTMLElement;
+      if (openBtn) {
+        const modalId = openBtn.dataset.openModal;
+        if (modalId && modalId.startsWith('project-modal')) {
+          const modal = document.getElementById(modalId) as HTMLDialogElement;
+          if (modal) {
+            modal.showModal();
+            document.body.style.overflow = 'hidden';
+            if ((window as any).lenis) (window as any).lenis.stop();
+            return;
+          }
+        }
+      }
+
+      const closeBtn = target.closest('[data-close-modal]') as HTMLElement;
+      if (closeBtn) {
+        const modalId = closeBtn.dataset.closeModal;
+        if (modalId && modalId.startsWith('project-modal')) {
+          const modal = document.getElementById(modalId) as HTMLDialogElement;
+          if (modal) {
+            modal.close();
+            document.body.style.overflow = '';
+            if ((window as any).lenis) (window as any).lenis.start();
+            return;
+          }
+        }
+      }
+
+      if (target.tagName === 'DIALOG' && target.id.startsWith('project-modal')) {
+        const dialog = target as HTMLDialogElement;
+        const rect = dialog.getBoundingClientRect();
+        if (
+          e.clientX < rect.left ||
+          e.clientX > rect.right ||
+          e.clientY < rect.top ||
+          e.clientY > rect.bottom
+        ) {
+          dialog.close();
+          document.body.style.overflow = '';
+          if ((window as any).lenis) (window as any).lenis.start();
+        }
+      }
+    });
+  }
+
+  setupModals();
+</script>
+
+<style>
+  dialog::backdrop {
+    animation: fade-in 0.3s ease-out forwards;
+  }
+  dialog[open] {
+    animation: scale-up 0.3s ease-out forwards;
+  }
+  
+  @keyframes fade-in {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+  @keyframes scale-up {
+    from { opacity: 0; transform: scale(0.95) translateY(10px); }
+    to { opacity: 1; transform: scale(1) translateY(0); }
+  }
+
+  .custom-scrollbar::-webkit-scrollbar {
+    width: 6px;
+  }
+  .custom-scrollbar::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  .custom-scrollbar::-webkit-scrollbar-thumb {
+    background: rgba(150,150,150,0.3);
+    border-radius: 3px;
+  }
+</style>

@@ -1,0 +1,203 @@
+---
+import { navLinks } from '../../content/social';
+---
+
+<nav
+  id="main-nav"
+  class="fixed top-4 left-1/2 -translate-x-1/2 z-50 glass-nav rounded-2xl px-2 py-2 transition-all duration-300"
+>
+  <!-- Desktop Nav -->
+  <div class="hidden md:flex items-center gap-1">
+    <a href="/#home" class="shrink-0 mr-4 ml-1 flex items-center justify-center transition-transform hover:scale-105" aria-label="Home">
+      <img src="/images/ui/jen_logo.png" alt="Logo" class="h-7 w-7 object-cover rounded-full border border-subtle" />
+    </a>
+    {
+      navLinks.map((link) => (
+        <a
+          href={link.href}
+          class="nav-link px-3.5 py-2 text-sm font-medium rounded-xl transition-all duration-300 text-secondary hover:text-primary hover:bg-white/[0.06]"
+          data-section={link.href.split('#')[1]}
+        >
+          {link.label}
+        </a>
+      ))
+    }
+    <div class="w-px h-5 bg-white/10 mx-1"></div>
+    <button
+      id="theme-toggle"
+      class="p-2 rounded-xl transition-all duration-300 text-secondary hover:text-primary hover:bg-white/[0.06]"
+      aria-label="Toggle theme"
+    >
+      <svg class="w-4 h-4 theme-icon-dark hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+      </svg>
+      <svg class="w-4 h-4 theme-icon-light hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+      </svg>
+    </button>
+  </div>
+
+  <!-- Mobile Nav -->
+  <div class="flex md:hidden items-center gap-2 w-full px-1">
+    <a href="/#home" class="shrink-0 flex items-center justify-center transition-transform hover:scale-105" aria-label="Home">
+      <img src="/images/ui/jen_logo.png" alt="Logo" class="h-8 w-8 object-cover rounded-full border border-subtle" />
+    </a>
+    <div class="flex-1"></div>
+    <button
+      id="theme-toggle-mobile"
+      class="p-2 rounded-xl transition-all duration-300 text-secondary hover:text-primary"
+      aria-label="Toggle theme"
+    >
+      <svg class="w-4 h-4 theme-icon-dark hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+      </svg>
+      <svg class="w-4 h-4 theme-icon-light hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+      </svg>
+    </button>
+    <button
+      id="mobile-menu-toggle"
+      class="p-2 rounded-xl transition-all duration-300 text-secondary hover:text-primary"
+      aria-label="Open menu"
+    >
+      <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+      </svg>
+    </button>
+  </div>
+</nav>
+
+<!-- Mobile Menu Overlay -->
+<div
+  id="mobile-menu"
+  class="fixed inset-0 z-40 hidden opacity-0 transition-opacity duration-300"
+>
+  <div class="absolute inset-0 bg-black/60 backdrop-blur-sm" id="mobile-menu-backdrop"></div>
+  <div class="absolute right-0 top-0 h-full w-72 bg-section backdrop-blur-xl border-l border-subtle p-6 pt-20 transform translate-x-full transition-transform duration-300" id="mobile-menu-panel">
+    <div class="flex flex-col gap-1">
+      {
+        navLinks.map((link) => (
+          <a
+            href={link.href}
+            class="mobile-nav-link px-4 py-3 text-base font-medium rounded-xl transition-all duration-300 text-secondary hover:text-primary hover:bg-accent-500/10"
+            data-section={link.href.split('#')[1]}
+          >
+            {link.label}
+          </a>
+        ))
+      }
+    </div>
+  </div>
+</div>
+
+<script>
+  // Theme toggle
+  function initTheme() {
+    const isDark = !document.documentElement.classList.contains('light');
+    document.querySelectorAll('.theme-icon-dark').forEach((el) => {
+      (el as HTMLElement).style.display = isDark ? 'block' : 'none';
+    });
+    document.querySelectorAll('.theme-icon-light').forEach((el) => {
+      (el as HTMLElement).style.display = isDark ? 'none' : 'block';
+    });
+  }
+
+  function toggleTheme() {
+    const html = document.documentElement;
+    const isLight = html.classList.contains('light');
+    if (isLight) {
+      html.classList.remove('light');
+      html.classList.add('dark');
+      localStorage.setItem('theme', 'dark');
+    } else {
+      html.classList.remove('dark');
+      html.classList.add('light');
+      localStorage.setItem('theme', 'light');
+    }
+    initTheme();
+  }
+
+  document.getElementById('theme-toggle')?.addEventListener('click', toggleTheme);
+  document.getElementById('theme-toggle-mobile')?.addEventListener('click', toggleTheme);
+  initTheme();
+
+  function initNavbar() {
+    initTheme();
+    
+    // Mobile menu
+    const mobileMenu = document.getElementById('mobile-menu');
+    const mobilePanel = document.getElementById('mobile-menu-panel');
+    const mobileBackdrop = document.getElementById('mobile-menu-backdrop');
+
+    function openMobileMenu() {
+      if (!mobileMenu || !mobilePanel) return;
+      mobileMenu.classList.remove('hidden');
+      requestAnimationFrame(() => {
+        mobileMenu.classList.remove('opacity-0');
+        mobileMenu.classList.add('opacity-100');
+        mobilePanel.classList.remove('translate-x-full');
+        mobilePanel.classList.add('translate-x-0');
+      });
+    }
+
+    function closeMobileMenu() {
+      if (!mobileMenu || !mobilePanel) return;
+      mobileMenu.classList.remove('opacity-100');
+      mobileMenu.classList.add('opacity-0');
+      mobilePanel.classList.remove('translate-x-0');
+      mobilePanel.classList.add('translate-x-full');
+      setTimeout(() => mobileMenu.classList.add('hidden'), 300);
+    }
+
+    const toggleBtn = document.getElementById('mobile-menu-toggle');
+    if (toggleBtn) {
+      // replace to remove old listeners if any
+      const newToggle = toggleBtn.cloneNode(true);
+      toggleBtn.parentNode?.replaceChild(newToggle, toggleBtn);
+      
+      newToggle.addEventListener('click', () => {
+        if (!mobileMenu) return;
+        if (mobileMenu.classList.contains('hidden')) {
+          openMobileMenu();
+        } else {
+          closeMobileMenu();
+        }
+      });
+    }
+
+    mobileBackdrop?.addEventListener('click', closeMobileMenu);
+    document.querySelectorAll('.mobile-nav-link').forEach((link) => {
+      link.addEventListener('click', closeMobileMenu);
+    });
+
+    // Active section highlight
+    const sections = document.querySelectorAll('section[id]');
+    const navLinksEls = document.querySelectorAll('.nav-link, .mobile-nav-link');
+
+    function highlightNav() {
+      let current = '';
+      sections.forEach((section) => {
+        const sectionEl = section as HTMLElement;
+        const sectionTop = sectionEl.offsetTop - 120;
+        if (window.scrollY >= sectionTop) {
+          current = sectionEl.getAttribute('id') || '';
+        }
+      });
+
+      navLinksEls.forEach((link) => {
+        link.classList.remove('text-primary', 'bg-accent-500/10', 'font-bold');
+        link.classList.add('text-secondary');
+        if ((link as HTMLElement).dataset.section === current && current !== '') {
+          link.classList.remove('text-secondary');
+          link.classList.add('text-primary', 'bg-accent-500/10', 'font-bold');
+        }
+      });
+    }
+
+    window.addEventListener('scroll', highlightNav, { passive: true });
+    highlightNav();
+  }
+
+  initNavbar();
+  document.addEventListener('astro:page-load', initNavbar);
+</script>

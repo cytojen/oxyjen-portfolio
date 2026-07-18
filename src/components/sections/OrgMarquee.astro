@@ -1,0 +1,74 @@
+---
+import { organizations } from '../../content/organizations';
+---
+
+<section class="relative py-16 overflow-hidden bg-section border-y border-subtle">
+  <div class="max-w-7xl mx-auto px-6 mb-8">
+    <p class="text-center text-muted text-sm tracking-widest uppercase font-medium">
+      Trusted by & Worked With
+    </p>
+  </div>
+
+  <div class="relative overflow-hidden" aria-label="Organization logos">
+    <!-- Marquee Track -->
+    <div class="marquee-container flex hover:[&>*]:pause">
+      <div class="animate-marquee flex items-center gap-16 shrink-0 pr-16">
+        {[...organizations, ...organizations, ...organizations].map((org) => (
+          <a
+            href={org.url}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="marquee-logo flex items-center justify-center h-20 w-48 shrink-0"
+            title={org.name}
+          >
+            <img
+              src={org.logo}
+              alt={org.name}
+              class="max-h-16 max-w-40 object-contain"
+              loading="lazy"
+            />
+          </a>
+        ))}
+      </div>
+      <!-- Duplicate for seamless loop -->
+      <div class="animate-marquee flex items-center gap-16 shrink-0 pr-16">
+        {[...organizations, ...organizations, ...organizations].map((org) => (
+          <a
+            href={org.url}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="marquee-logo flex items-center justify-center h-20 w-48 shrink-0"
+            title={org.name}
+            aria-hidden="true"
+          >
+            <img
+              src={org.logo}
+              alt=""
+              class="max-h-16 max-w-40 object-contain"
+              loading="lazy"
+            />
+          </a>
+        ))}
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .marquee-container:hover .animate-marquee {
+    animation-play-state: paused;
+  }
+
+  .animate-marquee {
+    animation-duration: 70s;
+  }
+
+  html.light .light-fade-left,
+  html.light .light-fade-right {
+    opacity: 1;
+  }
+
+  html.light .light-fade-left ~ :not(.light-fade-right):not(.light-fade-left) {
+    /* handled by global styles */
+  }
+</style>

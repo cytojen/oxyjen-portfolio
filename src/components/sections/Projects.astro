@@ -1,0 +1,37 @@
+---
+import SectionHeading from '../ui/SectionHeading.astro';
+import ProjectCard from '../cards/ProjectCard.astro';
+import { projects } from '../../content/projects';
+
+const featuredProjects = projects.filter((p) => p.featured).slice(0, 3);
+const hasMore = projects.length > 3;
+---
+
+<section id="projects" class="relative py-24 md:py-32 bg-section overflow-hidden">
+  <div class="bg-glow bg-glow-purple w-[500px] h-[500px] -bottom-40 -right-40"></div>
+
+  <div class="relative z-10 max-w-6xl mx-auto px-6 md:px-12">
+    <SectionHeading
+      label="Featured Projects"
+      eyebrow="Portfolio"
+      description="End-to-end solutions spanning data engineering, machine learning, and analytics."
+    />
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      {featuredProjects.map((project, index) => (
+        <ProjectCard project={project} index={index} />
+      ))}
+    </div>
+
+    {hasMore && (
+      <div class="text-center mt-12">
+        <a href="/projects" class="btn-secondary">
+          <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 10h16M4 14h16M4 18h16" />
+          </svg>
+          View All Projects
+        </a>
+      </div>
+    )}
+  </div>
+</section>

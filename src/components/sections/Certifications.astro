@@ -1,0 +1,23 @@
+---
+import SectionHeading from '../ui/SectionHeading.astro';
+import CertificationCard from '../cards/CertificationCard.astro';
+import { certifications } from '../../content/certifications';
+---
+
+<section id="certifications" class="relative py-24 md:py-32 bg-section-alt overflow-hidden">
+  <div class="bg-glow bg-glow-blue w-[500px] h-[500px] top-0 -left-40"></div>
+
+  <div class="relative z-10 max-w-6xl mx-auto px-6 md:px-12">
+    <SectionHeading
+      label="Certifications & Courses"
+      eyebrow="Credentials"
+      description="Industry-recognized certifications in data science, engineering, and computer science."
+    />
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+      {certifications.map((cert, index) => (
+        <CertificationCard certification={cert} index={index} />
+      ))}
+    </div>
+  </div>
+</section>
