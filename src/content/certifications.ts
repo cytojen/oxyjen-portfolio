@@ -10,10 +10,19 @@ export interface Certification {
 
 export const certifications: Certification[] = [
   {
+    id: 'microsoft-azure-databricks',
+    title: 'Microsoft Certified: Azure Databricks Data Engineer Associate',
+    issuer: 'Microsoft',
+    year: '2026',
+    image: '/images/certifications/Microsoft_AzureDatabricks.png',
+    credentialUrl: 'https://learn.microsoft.com/api/credentials/share/en-us/JenPatrickNataba-6454/5531CA61A677F5CE?sharingId=1229231DB8EDA6E9',
+    description: 'Certified in setting up and configuring Azure Databricks environments, securing Unity Catalog objects, and building scalable data pipelines.',
+  },
+  {
     id: 'datacamp-de',
     title: 'Certified Data Engineer',
     issuer: 'DataCamp',
-    year: '2024',
+    year: '2026',
     image: '/images/certifications/nataba_data_engi_certification.jpg',
     credentialUrl: 'https://www.datacamp.com/certificate/DE0019422770746',
     description: 'Engineered end-to-end data pipelines to automate the extraction, transformation, and validation of large datasets.',
@@ -31,7 +40,7 @@ export const certifications: Certification[] = [
     id: 'ibm-ds',
     title: 'Industry Professional Credentials — IBM Data Science',
     issuer: 'IBM',
-    year: '2024',
+    year: '2025',
     image: '/images/certifications/ibm_data_science.png',
     credentialUrl: 'https://www.coursera.org/account/accomplishments/specialization/7DAN7GTYZOTC',
     description: 'Completed IBM Data Science specialization track.',
